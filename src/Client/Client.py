@@ -1,10 +1,11 @@
-from letter import letter
+from src.model.letter import letter
+import conf
 
 class Client:
     def __init__(self):
         
-        self.seq = '282992654'
-        self.sodae = '3226'
+        self.seq = conf.memberseqVal
+        self.sodae = conf.sodae
         self.myletter = letter(self.seq,self.sodae)
 
     def Sender(self,Addr1,Addr2,Zipcode,senderName,relationship,password):

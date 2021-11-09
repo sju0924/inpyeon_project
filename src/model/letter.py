@@ -18,7 +18,7 @@ class letter:
         self.is_Receiver = 0
     def setSenderdata(self, Addr1,Addr2,Zipcode,senderName,relationship,password):
         self.Addr1 = Addr1
-        self.Addr1 = Addr2
+        self.Addr2 = Addr2
         self.senderZipcode = Zipcode
         self.senderName = senderName
         self.relationship = relationship

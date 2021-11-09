@@ -1,15 +1,18 @@
 import sys
-from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QLabel, QLineEdit,QPushButton,QTextEdit,QDesktopWidget)
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QCoreApplication,Qt
-from Client import Client 
+from PyQt5.QtWidgets import (QDialog,QApplication, QWidget, QGridLayout, QLabel, QLineEdit,QPushButton,QTextEdit,QDesktopWidget)
+from PyQt5.QtGui import *
+from PyQt5.QtCore import QCoreApplication
+from src.Client.Client import Client 
+from MusicUI import MyUIApp
 
 class MyApp(QWidget):
-
+    
 # 내용
     
     def __init__(self):
         super().__init__()
+        self.is_over = 0
+
         #내용 textbox
         self.box_title = QLineEdit()
         self.box_content = QTextEdit()
@@ -18,13 +21,17 @@ class MyApp(QWidget):
         self.box_author = QLineEdit()
         self.box_relation = QLineEdit()
         self.box_Addr1 = QLineEdit()
+
+
         self.box_Addr2 = QLineEdit()
         self.box_postnum = QLineEdit()
         self.box_password = QLineEdit()
         self.label_count = QLabel()
+        self.label_count.setText('0/1200자')
 
         self.initUI()
         self.client = Client()
+        self.dialog = QDialog()
 
     def center(self):
         qr = self.frameGeometry()
@@ -35,18 +42,23 @@ class MyApp(QWidget):
 
     def initUI(self):
         # 종료 버튼
-        self.btn = QPushButton('Quit', self)
+        self.btn = QPushButton('종료', self)
         self.btn.clicked.connect(QCoreApplication.instance().quit)
         self.box_content.textChanged.connect(lambda:self.countContentLen())
         #제출 버튼
         self.btn_submit = QPushButton('제출', self)
         self.btn_submit.clicked.connect(lambda:self.submitButtonclick())
-        
+
+        #음악 
+        self.btn_music = QPushButton('음악 검색', self)
+        self.btn_music.clicked.connect(self.dialog_open)
+
         #그리드 설정
         grid = QGridLayout()
         self.setLayout(grid)
 
-        grid.addWidget(QLabel('공군 인편 작성기'), 0, 0,1,4)
+        grid.addWidget(QLabel('공군 인편 작성기'), 0, 0,1,2)
+        grid.addWidget(self.btn_music,0,3)
         grid.addWidget(QLabel('작성자'), 1, 0)
         grid.addWidget(self.box_author, 1, 1)
         grid.addWidget(QLabel('관계'), 1, 2)
@@ -76,7 +88,22 @@ class MyApp(QWidget):
         self.resize(600, 400)
         self.show()
 
-    def submitButtonclick(self):
+    def clearBox(self):
+        
+
+        if(self.is_over == 1):
+            self.box_content.setText(self.content[1200:])
+        else:
+            self.box_content.setText("")
+            self.box_author.setText("")
+            self.box_relation.setText("")
+            self.box_Addr1.setText("")
+            self.box_Addr2.setText("")
+            self.box_postnum.setText("")
+            self.box_password.setText("")
+            self.box_title.setText("")
+
+    def getBox(self):
         self.SenderName = self.box_author.text()
         self.relation = self.box_relation.text()
         self.Addr1 = self.box_Addr1.text()
@@ -87,23 +114,39 @@ class MyApp(QWidget):
         self.title = self.box_title.text()
         self.content = self.box_content.toPlainText()
 
+        return self.content
+
+    def submitButtonclick(self):
+        
+        new_content = self.getBox()
+        if(self.is_over == 1):
+            new_content = new_content[:1200]
+            self.box_content
+
         print('송신자: ',self.SenderName, self.relation,self.Addr1,self.Addr2,self.postnum)
-        print('내용 : ',self.title,self.content)
+        print('내용 : ',self.title,new_content)
         self.client.Sender(self.Addr1,self.Addr2,self.postnum,self.SenderName,self.relation,self.password)
-        self.client.WriteContent(self.title,self.content)
+        self.client.WriteContent(self.title,new_content)
 
-        self.box_author.setText("")
-        self.relation = self.box_relation.setText("")
-        self.Addr1 = self.box_Addr1.setText("")
-        self.Addr2 = self.box_Addr2.setText("")
-        self.postnum = self.box_postnum.setText("")
-        self.password = self.box_password.setText("")
+        self.clearBox()
 
-        self.title = self.box_title.setText("")
-        self.content = self.box_content.setText("")
 
     def countContentLen(self):
-        self.label_count.setText(str(len(self.box_content.toPlainText()))+ '/1200자')
+        length = len(self.box_content.toPlainText())
+        self.label_count.setText(str(length)+ '/1200자')
+        if(length>1200):
+            self.is_over = 1
+            self.btn_submit.setText('제출(1200자)')
+        elif(length<=1200 and self.is_over == 1):
+            self.btn_submit.setText('제출')
+            self.is_over = 0
+
+    def dialog_open(self):
+        self.win = MyUIApp()
+        self.win.command.connect(self.anyfunction)
+
+    def anyfunction(self, msg):
+        self.box_content.setText(msg)
 
 if __name__ == '__main__':
    app = QApplication(sys.argv)
