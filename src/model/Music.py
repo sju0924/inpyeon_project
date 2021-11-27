@@ -69,11 +69,9 @@ class lyric:
         idx = data.find("<table class='tabletext' cellspacing=0 cellpadding=0>")
         idx = idx + len("<table class='tabletext' cellspacing=0 cellpadding=0>")
         idx_end = data.find('</table>',idx)
-        #print(idx,idx_end)
         while(idx < idx_end and idx != -1):
             start = data.find("<td>",idx)
             end = data.find("<br>",start+1)
-            #print(start,end)
             res = res + data[start+4:end] + " "
     
 

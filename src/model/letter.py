@@ -33,11 +33,11 @@ class letter:
         self.is_Receiver = 1
     
 
-    def write(self,title,content):
+    def write(self,title,content,siteID):
         url = 'https://atc.airforce.mil.kr:444/user/emailPicSaveEmail.action'
         data = {
-            'siteId': 'last2',
-            'parent': '%2Fuser%2FindexSub.action%3FcodyMenuSeq%3D156893223%26siteId%3Dlast2%26menuUIType%3Dtop%26dum%3Ddum%26command2%3DwriteEmail%26searchCate%3D%26searchVal%3D%26page%3D1%26memberSeqVal%3D282992654%26sodaeVal%3D3226',
+            'siteId': siteID,
+            'parent': '%2Fuser%2FindexSub.action%3FcodyMenuSeq%3D159014200%26siteId%3Dhaengjeong%26menuUIType%3Dsub%26dum%3Ddum%26command2%3DgetEmailList%26searchName%3D%25EA%25B9%2580%25EC%2584%25B1%25ED%259B%2588%26searchBirth%3D20000825%26memberSeq%3D285810103',
             'page': '1',
             'command2': 'writeEmail',
             'searchCate': '',
@@ -58,4 +58,45 @@ class letter:
 
         response = self.session.post(url = url, data=data, verify=False)
         
-        print(response.text)
+        return (response.status_code)
+
+    def modify(self,title,content,siteID,letterseq,password):
+        url = 'https://atc.airforce.mil.kr:444/user/emailPicModifyEmail.action'
+        data = {
+            'siteId': siteID,
+            'parent': '%2Fuser%2FindexSub.action%3FcodyMenuSeq%3D159014200%26siteId%3D'+siteID+'%26menuUIType%3Dsub%26dum%3Ddum%26command2%3DmodifyForm%26searchCate%3D%26searchVal%3D%26page%3D1%26letterSeq%3D'+str(letterseq),
+            'page': '1',
+            'command2': 'writeEmail',
+            'searchCate': '',
+            'searchVal': '',
+            'letterSeq': letterseq,
+            'memberSeq': '',
+            'memberSeqVal': self.memberseqVal,
+            'sodaeVal': self.sodaeVal,
+            'senderZipcode': self.senderZipcode,
+            'senderAddr1': self.Addr1,
+            'senderAddr2': self.Addr2,
+            'senderName': self.senderName,
+            'relationship': self.relationship,
+            'title': title,
+            'contents': content,
+            'password': password
+        }
+
+        response = self.session.post(url = url, data=data, verify=False)
+        
+        return (response.status_code)
+
+    def delete(self,letterseq,siteId,password,page):
+        URL = 'https://www.airforce.mil.kr/user/emailPicDeleteEmail.action'
+        data={
+            'siteId': siteId,
+            'letterSeq': letterseq,
+            'page': page,
+            'command1': 'deleteEmail',
+            'password': password
+        }
+
+        response = self.session.post(url = URL, data=data, verify=False)
+        
+        return (response.status_code)
