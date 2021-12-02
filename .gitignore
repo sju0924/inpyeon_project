@@ -1,7 +1,4 @@
 *.mp4
-dist/
-build/
-*.spec
 *.txt
 *.mp4
 __pycache__
