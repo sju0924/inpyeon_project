@@ -1,4 +1,5 @@
 import requests
+import conf
 
 class letter:
     
@@ -8,8 +9,8 @@ class letter:
         self.Addr1 = ''
         self.Addr2 = ''
         self.senderName = ''
-        self.memberseqVal = seq
-        self.sodaeVal = sodae
+        self.memberseqVal = conf.memberseqVal
+        self.sodaeVal = conf.sodae
         self.senderZipcode=''
         self.relationship = ''
         self.password = ''
@@ -25,19 +26,13 @@ class letter:
         self.password = password
 
         self.is_sender = 1
-        
-    def setReceiverdata(self,memberseqVal,sodae):
-        self.sodaeVal = sodae
-        self.memberseqVal = memberseqVal
-
-        self.is_Receiver = 1
     
 
     def write(self,title,content,siteID):
         url = 'https://atc.airforce.mil.kr:444/user/emailPicSaveEmail.action'
         data = {
             'siteId': siteID,
-            'parent': '%2Fuser%2FindexSub.action%3FcodyMenuSeq%3D159014200%26siteId%3Dhaengjeong%26menuUIType%3Dsub%26dum%3Ddum%26command2%3DgetEmailList%26searchName%3D%25EA%25B9%2580%25EC%2584%25B1%25ED%259B%2588%26searchBirth%3D20000825%26memberSeq%3D285810103',
+            'parent': '%2Fuser%2FindexSub.action%3FcodyMenuSeq%3D159014200%26siteId%3D'+siteID+'%26menuUIType%3Dsub%26dum%3Ddum%26command2%3DgetEmailList%26searchName%3D'+conf.name+'%26searchBirth%3D'+conf.birthday+'%26memberSeq%3D285810103',
             'page': '1',
             'command2': 'writeEmail',
             'searchCate': '',

@@ -13,13 +13,16 @@ class Music:
     def Length(self):
         return self.length
 
-    def getURL(self, keyword):
-        return 'http://www.boom4u.net/lyrics/?keyword='+keyword+'&searchoption='
     
     def getMusic(self,title):
         self.length = 0
-
-        res = self.session.get(self.getURL(title))
+        URL = 'http://www.boom4u.net/lyrics'
+        params={
+            'keyword' : title,
+            'searchoption' : ""
+        }
+        
+        res = self.session.get(url = URL, params = params)
         res =res.text
         get_id = "a href='view.php?id="
         idx = res.find(get_id)
@@ -61,7 +64,12 @@ class lyric:
         self.lyrics = ""    
         self.session = requests.Session()
     def getLyric(self, code):
-        data = self.session.get('http://www.boom4u.net/lyrics/view.php?id='+code)
+        URL = 'http://www.boom4u.net/lyrics/view.php'
+        params={
+            'id' : code,
+        }
+        
+        data = self.session.get(url = URL, params = params)
         data = data.text
 
         res = ""

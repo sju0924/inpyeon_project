@@ -1,7 +1,6 @@
 # 기존 인편 목록을 가져옴
 #-*- coding:utf-8 -*- 
 import requests
-
 class LetterList:
     def __init__(self):
         self.lst_code = []
@@ -45,20 +44,18 @@ class LetterList:
             start = idx+len(get_id)
             end = res.find("'",start)
             self.lst_code.append(res[start:end])
-            #print("코드: " ,res[start:end],"======================\n")
+
             # 제목 찾기
             idx = res.find('">',end)
             start = idx+2
             end = res.find("</a>",start)
             self.lst_title.append(res[start:end])
-            #print("제목: " ,res[start:end],"======================\n")
 
             #작성자 찾기
             idx = res.find("<td>",end+1)
             start = idx+4
             end = res.find("</td>",start)
             self.lst_author.append(res[start:end])
-            #print("작성자: " ,res[start:end],"======================\n")
 
             #상태 찾기
             idx = res.find("<td>",end+1)

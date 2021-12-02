@@ -1,4 +1,4 @@
-from src.model.Music import Music, lyric
+from src.service.Music import Music, lyric
 
 class MusicClient:
     def __init__(self):

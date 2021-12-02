@@ -4,8 +4,8 @@ from PyQt5.QtWidgets import (QDialog,QMessageBox,QRadioButton,QApplication, QWid
 from PyQt5.QtGui import *
 from PyQt5.QtCore import QCoreApplication
 from src.Client.Client import Client 
-from MusicUI import MyUIApp
-from ModifyUI import MyModifyApp
+from src.ui.MusicUI import MyUIApp
+from src.ui.ModifyUI import MyModifyApp
 
 class MyApp(QWidget):
 # 내용

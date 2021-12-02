@@ -1,4 +1,4 @@
-from src.model.letter import letter
+from src.service.letter import letter
 from src import conf
 
 class Client:

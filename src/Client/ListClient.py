@@ -1,4 +1,4 @@
-from src.model.List import LetterList
+from src.service.List import LetterList
 from src import conf
 
 class ListClient:
